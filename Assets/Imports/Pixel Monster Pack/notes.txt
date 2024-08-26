@@ -1,0 +1,11 @@
+﻿CONTENT
+
+This Pixel Art Monster Pack contains 10 creatures and their color variations (40 sprite total).
+
+Original size of the sprites are 32x32.
+
+The sprites are stored individualy and together as sprite sheets aswell. The pack also has to main folders: one with 32x32 spirites (original size) and another with 64x64 spirtes (same sprites, but with x2 zoom).
+
+The sprite sheets use 32x32 and 64x64 grid.
+
+If you have any questions, write and e-mail: iphigenia.pixels@gmail.com
