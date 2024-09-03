@@ -27,9 +27,6 @@ public class SKillTreeController : MonoBehaviour
     public TMP_Text DescriptionSkillDisplay;
     public TMP_Text TitleSkillDisplay;
     public TMP_Text GetBtnDisplay;
-    public TMP_Text SPCostDisplay;
-
-    public BigDouble SPCost;
 
     // Reference to the target UI Image to display the clicked button's sprite
     public Image targetImage;
@@ -56,15 +53,6 @@ public class SKillTreeController : MonoBehaviour
 
             // Set the sprite of the target UI Image to the clicked button's sprite
             targetImage.sprite = buttonSprite;
-            if(active == true)
-            {
-                GetBtnDisplay.text = "Activated";
-            }
-            else
-            {
-                GetBtnDisplay.text = "Get";
-            }
-  
 
             // Optionally, you can adjust other properties of the target UI Image as needed
             // For example, you can set the fill mode, color, etc.

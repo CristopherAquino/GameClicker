@@ -7,6 +7,7 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour
 {
     public BigDouble maxHP;
+    public BigDouble CurrentmaxHP;
     public BigDouble currentHP;
 
     public BigDouble Attack;
@@ -22,7 +23,6 @@ public class PlayerStats : MonoBehaviour
     public BigDouble CurrentCD;
 
     public BigDouble LootMultiplier;
-    public BigDouble SkillPoints;
     public bool flag = false;
     public bool flagPotion = false;
 
@@ -36,6 +36,7 @@ public class PlayerStats : MonoBehaviour
 
     public void setCurrentStats()
     {
+        playerSkills.OnSkillUnlocked += PlayerSkills_OnSkillUnlocked;
         CurrentAttack = Attack;
         CurrentDefense = Defense;
         CurrentCR = CriticalRate;
@@ -195,9 +196,27 @@ public class PlayerStats : MonoBehaviour
         return additionalDamage;
     }*/
 
+    private void PlayerSkills_OnSkillUnlocked(object sender, PlayerSkills.OnSkillUnlockedEventArgs e)
+    {
+        switch (e.skillType)
+        {
+            case PlayerSkills.SkillType.VitalityBoost:
+                SetVitalityBoost();
+                break;
+            case PlayerSkills.SkillType.BetterShield:
+
+                break;
+        }
+    }
+
     public PlayerSkills GetPlayerSkills()
     {
         return playerSkills;
+    }
+
+    private void SetVitalityBoost()
+    {
+        CurrentmaxHP = (maxHP/2) + maxHP;
     }
 
     public bool CanUseVitalityBoost(){ return playerSkills.IsSkillUnlocked(PlayerSkills.SkillType.VitalityBoost); }

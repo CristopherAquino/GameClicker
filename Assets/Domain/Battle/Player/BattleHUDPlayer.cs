@@ -53,7 +53,7 @@ public class BattleHUDPlayer : MonoBehaviour
         hpSlider.maxValue = 1;
 
         currenthp = player.currentHP;
-        maxhp = player.maxHP;
+        maxhp = player.CurrentmaxHP;
         SetHP(currenthp);
     }
 

@@ -9,7 +9,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
-
 public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST, WAITING }
 
 public class BattleSystem : MonoBehaviour

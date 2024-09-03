@@ -38,15 +38,15 @@ public class XPManager : MonoBehaviour
             currentLevel++;                 // Increase the player's level
             Level = currentLevel;
             xpToNextLevel = CalculateXPForNextLevel(currentLevel);  // Calculate new XP threshold
-            // Optionally add a call to a function that handles what happens on leveling up
+            
             LevelUpEffects();
         }
     }
 
-    // Calculate the XP needed for the next level (simple formula, can be customized)
+    // Calculate the XP needed for the next level
     BigDouble CalculateXPForNextLevel(BigDouble level)
     {
-        return 100 + (level - 1) * 50;  // Example formula
+        return 100 + (level * level);
     }
 
     public void AddXPFromEnemy(BigDouble enemyLevel)
@@ -80,7 +80,6 @@ public class XPManager : MonoBehaviour
         int defUP = Random.Range(4, 5);
         int cdUP = Random.Range(1, 3);
 
-        player.SkillPoints++; 
 
         if (Level > 100 && Level <= 500)
         {
