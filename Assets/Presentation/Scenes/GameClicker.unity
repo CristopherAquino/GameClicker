@@ -913,7 +913,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1640372032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SKillTreeController, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -10555,7 +10555,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1640372032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SKillTreeController, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -13859,7 +13859,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1640372032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SKillTreeController, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -16237,7 +16237,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1640372032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SKillTreeController, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -17792,7 +17792,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1640372032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SKillTreeController, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -22289,7 +22289,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1640372032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SKillTreeController, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -26771,7 +26771,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1640372032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SKillTreeController, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -27475,7 +27475,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1640372032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SKillTreeController, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -28092,7 +28092,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1640372032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SKillTreeController, Assembly-CSharp
         m_MethodName: OnGETbutton
         m_Mode: 1
@@ -31760,7 +31760,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1640372032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SKillTreeController, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -31953,6 +31953,9 @@ MonoBehaviour:
   maxHP:
     mantissa: 1
     exponent: 3
+  CurrentmaxHP:
+    mantissa: 0
+    exponent: 0
   currentHP:
     mantissa: 1
     exponent: 3
@@ -32904,7 +32907,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1640372032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SKillTreeController, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -33847,7 +33850,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1640372032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SKillTreeController, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -35246,7 +35249,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1640372032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SKillTreeController, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -37480,41 +37483,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1640372030}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2d9b3bab6f311e41a6cb8859d40c9da, type: 3}
+  m_Script: {fileID: 11500000, guid: b8f2c8df91609d146bca8e2e59c6ab4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ico1: {fileID: 1439914241}
-  Ico2: {fileID: 18079778}
-  Ico3: {fileID: 2058292512}
-  Ico4: {fileID: 798857504}
-  Ico5: {fileID: 712224568}
-  Ico6: {fileID: 1542176773}
-  Ico7: {fileID: 1264562311}
-  Ico8: {fileID: 1011761318}
-  Ico9: {fileID: 388749542}
-  Ico10: {fileID: 1804539950}
-  Ico11: {fileID: 1219951916}
-  Ico12: {fileID: 1496248775}
-  Ico13: {fileID: 1467315630}
-  Ico14: {fileID: 585869227}
-  Line1: {fileID: 609300008}
-  Line2: {fileID: 137276455}
-  Line3: {fileID: 1078733598}
-  Line4: {fileID: 157914991}
-  Line5: {fileID: 64352456}
-  Line6: {fileID: 1556253975}
-  Line7: {fileID: 1285601679}
-  Line8: {fileID: 1547354514}
-  Line9: {fileID: 125503079}
-  Line10: {fileID: 1984747461}
-  Line11: {fileID: 528605541}
-  Line12: {fileID: 1546712409}
-  Line13: {fileID: 1259425260}
-  Getbtn: {fileID: 1284319725}
-  DescriptionSkillDisplay: {fileID: 13370036}
-  TitleSkillDisplay: {fileID: 56104289}
-  GetBtnDisplay: {fileID: 1315608775}
-  targetImage: {fileID: 1015658984}
+  Level: {fileID: 1444315894}
+  skills: []
 --- !u!1 &1641558005
 GameObject:
   m_ObjectHideFlags: 0
@@ -41216,7 +41189,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1640372032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SKillTreeController, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 5
@@ -47435,7 +47408,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1640372032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SKillTreeController, Assembly-CSharp
         m_MethodName: OnButtonClick
         m_Mode: 5

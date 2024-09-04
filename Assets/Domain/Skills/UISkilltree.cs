@@ -5,14 +5,28 @@ using UnityEngine.UI;
 
 public class UISkilltree : MonoBehaviour
 {
+    public SkillTreeManager skillTreeManager;
+    public List<Button> skillButtons;
 
-    private PlayerSkills playerSkills;
-
-    private void UIGet()
+    void Update()
     {
-        /*transform.Find("Getbtn").GetComponent<>().ClickFunc = () =>
+        UpdateSkillButtons();
+    }
+
+    void UpdateSkillButtons()
+    {
+        for (int i = 0; i < skillTreeManager.skills.Count; i++)
         {
-            playerSkills.UnlockSkill(PlayerSkills.SkillType.VitalityBoost);
-        };*/
+            if (skillTreeManager.skills[i].isUnlocked)
+            {
+                skillButtons[i].interactable = true;
+                skillButtons[i].GetComponentInChildren<Text>().text = skillTreeManager.skills[i].skillName + " (Unlocked)";
+            }
+            else
+            {
+                skillButtons[i].interactable = false;
+                skillButtons[i].GetComponentInChildren<Text>().text = skillTreeManager.skills[i].skillName;
+            }
+        }
     }
 }

@@ -32,11 +32,11 @@ public class PlayerStats : MonoBehaviour
     public float durationCR;
     public float durationCD;
 
-    private PlayerSkills playerSkills;
+    //private PlayerSkills playerSkills;
 
     public void setCurrentStats()
     {
-        playerSkills.OnSkillUnlocked += PlayerSkills_OnSkillUnlocked;
+        //playerSkills.OnSkillUnlocked += PlayerSkills_OnSkillUnlocked;
         CurrentAttack = Attack;
         CurrentDefense = Defense;
         CurrentCR = CriticalRate;
@@ -57,8 +57,8 @@ public class PlayerStats : MonoBehaviour
     {
         BigDouble tamount = amount * 0.25;
         currentHP += tamount.Truncate();
-        if (currentHP > maxHP)
-            currentHP = maxHP;
+        if (currentHP > CurrentmaxHP)
+            currentHP = CurrentmaxHP;
     }
 
     public void IncreaseAttack()
@@ -85,7 +85,7 @@ public class PlayerStats : MonoBehaviour
         durationCR = 20f;
         hud.flagCR = true;
         CurrentCR += (int)amount.ToDouble();
-        if(CurrentCR > 100)
+        if (CurrentCR > 100)
         {
             CurrentCR = 100;
         }
@@ -127,17 +127,17 @@ public class PlayerStats : MonoBehaviour
 
     private bool IsCriticalHit(int criticalRate)
     {
-        float roll = Random.Range(1.0f,100.0f);
+        float roll = Random.Range(1.0f, 100.0f);
         roll = Mathf.RoundToInt(roll);
 
-        if(roll < criticalRate)
+        if (roll < criticalRate)
         {
             return true;
         }
         else
         {
             return false;
-        }    
+        }
     }
 
     public BigDouble tempoStat(string namePotion)
@@ -196,41 +196,39 @@ public class PlayerStats : MonoBehaviour
         return additionalDamage;
     }*/
 
-    private void PlayerSkills_OnSkillUnlocked(object sender, PlayerSkills.OnSkillUnlockedEventArgs e)
+    public void SetVitalityBoost()
     {
-        switch (e.skillType)
-        {
-            case PlayerSkills.SkillType.VitalityBoost:
-                SetVitalityBoost();
-                break;
-            case PlayerSkills.SkillType.BetterShield:
-
-                break;
-        }
+        CurrentmaxHP = (maxHP / 2) + maxHP;
     }
 
-    public PlayerSkills GetPlayerSkills()
+    public void IncreaseHealth(int amount)
     {
-        return playerSkills;
+      
+        Debug.Log("Health increased by " + amount);
     }
 
-    private void SetVitalityBoost()
+    public void IncreaseShield(int amount)
     {
-        CurrentmaxHP = (maxHP/2) + maxHP;
+       
+        Debug.Log("Shield increased by " + amount);
     }
 
-    public bool CanUseVitalityBoost(){ return playerSkills.IsSkillUnlocked(PlayerSkills.SkillType.VitalityBoost); }
-    public bool CanUseBetterShield() { return playerSkills.IsSkillUnlocked(PlayerSkills.SkillType.BetterShield); }
-    public bool CanUseLifeDrain() { return playerSkills.IsSkillUnlocked(PlayerSkills.SkillType.LifeDrain); }
-    public bool CanUseCriticalFocus() { return playerSkills.IsSkillUnlocked(PlayerSkills.SkillType.CriticalFocus); }
-    public bool CanUseEvasion() { return playerSkills.IsSkillUnlocked(PlayerSkills.SkillType.Evasion); }
-    public bool CanUseShieldBreaker() { return playerSkills.IsSkillUnlocked(PlayerSkills.SkillType.ShieldBreaker); }
-    public bool CanUseRegeneration() { return playerSkills.IsSkillUnlocked(PlayerSkills.SkillType.Regeneration); }
-    public bool CanUsePowerStrike() { return playerSkills.IsSkillUnlocked(PlayerSkills.SkillType.PowerStrike); }
-    public bool CanUseExecution() { return playerSkills.IsSkillUnlocked(PlayerSkills.SkillType.Execution); }
-    public bool CanUseQuickStep() { return playerSkills.IsSkillUnlocked(PlayerSkills.SkillType.QuickStep); }
-    public bool CanUseFortify() { return playerSkills.IsSkillUnlocked(PlayerSkills.SkillType.Fortify); }
-    public bool CanUseGuardiansBane() { return playerSkills.IsSkillUnlocked(PlayerSkills.SkillType.GuardiansBane); }
-    public bool CanUseExpertSwordman() { return playerSkills.IsSkillUnlocked(PlayerSkills.SkillType.ExpertSwordman); }
-    public bool CanUseMastery() { return playerSkills.IsSkillUnlocked(PlayerSkills.SkillType.Mastery); }
+    public void EnableLifeDrain(bool enabled)
+    {
+        
+        Debug.Log("Life Drain enabled: " + enabled);
+    }
+
+    public void IncreaseCriticalChance(int amount)
+    {
+        CurrentCR += amount;
+        Debug.Log("Critical chance increased by " + amount + "%");
+    }
+
+    public void IncreaseEvasion(int amount)
+    {
+       
+        Debug.Log("Evasion chance increased by " + amount + "%");
+    }
 }
+

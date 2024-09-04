@@ -140,9 +140,9 @@ public class BattleSystem : MonoBehaviour
 		drop.cleanpanel();
 		mods(name);
         playerHUD.setNewStart();
-        if (playerUnit.currentHP != playerUnit.maxHP)
+        if (playerUnit.currentHP != playerUnit.CurrentmaxHP)
         {
-            playerUnit.currentHP = playerUnit.maxHP;
+            playerUnit.currentHP = playerUnit.CurrentmaxHP;
         }
         StartNewBattle();
     }
@@ -254,7 +254,7 @@ public class BattleSystem : MonoBehaviour
 
 	IEnumerator PlayerHeal()
 	{
-		playerUnit.Heal(playerUnit.maxHP);
+		playerUnit.Heal(playerUnit.CurrentmaxHP);
 
 		playerHUD.SetHP(playerUnit.currentHP);
 		dialogueText.text = "Recovered 25% health";
