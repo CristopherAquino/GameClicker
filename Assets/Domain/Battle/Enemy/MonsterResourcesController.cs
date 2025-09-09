@@ -4,7 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+#if UNITY_EDITOR
 using static UnityEditor.Progress;
+#endif
 
 [System.Serializable]
 public class LootItem

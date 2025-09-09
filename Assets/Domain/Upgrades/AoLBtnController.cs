@@ -43,7 +43,7 @@ public class AoLBtnController : MonoBehaviour
         CostCoinDisplay.text = "" + NotationScript.Notate(CostCoin);
         CostMonsterEssenceDisplay.text = "" + NotationScript.Notate(CostMonsterEssence);
         AoLifeLvlDisplay.text = "" + NotationScript.Notate(AoLifeLvl);
-        HPDisplay.text = NotationScript.Notate(Player.maxHP) + ""; 
+        HPDisplay.text = NotationScript.Notate(Player.MaxHP) + ""; 
 
         if (Buy.f3 == true)
         {
@@ -80,7 +80,7 @@ public class AoLBtnController : MonoBehaviour
             Coins.Coins -= (CostCoin * Buy.NumxBuy);
             Monster.MonsterEssence -= (CostMonsterEssence * Buy.NumxBuy);
 
-            Player.maxHP = (Player.maxHP + (AoLifeLvl * 100));
+            Player.MaxHP = (Player.MaxHP + (AoLifeLvl * 100));
         }
     }
 }

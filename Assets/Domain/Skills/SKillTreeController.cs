@@ -18,7 +18,7 @@ public class SKillTreeController : MonoBehaviour
     private Image Line1, Line2, Line3, Line4, Line5, Line6, Line7, Line8,
     Line9, Line10, Line11, Line12, Line13;
 
-    bool active = false;
+    bool skillactive = false;
 
     [SerializeField]
     private Button Getbtn;
@@ -78,6 +78,10 @@ public class SKillTreeController : MonoBehaviour
                 buttonImage = Ico1.GetComponent<Image>();
                 TitleSkillDisplay.text = "Vitality Boost";
                 DescriptionSkillDisplay.text = "Permanently increases the player's MaxHP by 50% during battles.";
+                if(skillactive != false)
+                {
+                    GetBtnDisplay.text = "Active";
+                }
                 
 
             break;
@@ -169,7 +173,7 @@ public class SKillTreeController : MonoBehaviour
             case "skill1":
                 Line1.GetComponent<Image>();
                 Line1.color = Color.blue;
-                active = true;
+                skillactive = true;
 
                 break;
             case "skill2":

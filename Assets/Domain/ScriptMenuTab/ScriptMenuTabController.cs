@@ -14,6 +14,7 @@ public class ScriptMenuTabController : MonoBehaviour
     public CanvasGroup DeadScreen;
     public CanvasGroup SkillsScreen;
     public CanvasGroup LVLUP;
+    public UISkilltree panel;
 
     public bool flagVisible = false;
 
@@ -29,6 +30,8 @@ public class ScriptMenuTabController : MonoBehaviour
         ChangerCanvasGroup(false, DeadScreen);
         ChangerCanvasGroup(false, LVLUP);
         ChangerCanvasGroup(false, SkillsScreen);
+        panel.HideInfoPanel();
+
     }
 
     void SetActiveRecursively(GameObject obj, bool active)
@@ -79,6 +82,7 @@ public class ScriptMenuTabController : MonoBehaviour
                 ChangerCanvasGroup(false, BattlesScreen);
                 ChangerCanvasGroup(false, StageScreen);
                 ChangerCanvasGroup(false, SkillsScreen);
+                panel.HideInfoPanel();
                 break;
             case "Upgrades":
                 ChangerCanvasGroup(false, ResourcesScreen);
@@ -88,6 +92,7 @@ public class ScriptMenuTabController : MonoBehaviour
                 ChangerCanvasGroup(false, BattlesScreen);
                 ChangerCanvasGroup(false, StageScreen);
                 ChangerCanvasGroup(false, SkillsScreen);
+                panel.HideInfoPanel();
                 break;
             case "Potions":
                 ChangerCanvasGroup(false, ResourcesScreen);
@@ -97,6 +102,7 @@ public class ScriptMenuTabController : MonoBehaviour
                 ChangerCanvasGroup(false, BattlesScreen);
                 ChangerCanvasGroup(false, StageScreen);
                 ChangerCanvasGroup(false, SkillsScreen);
+                panel.HideInfoPanel();
                 break;
             case "Battles":
                 ChangerCanvasGroup(false, ResourcesScreen);
@@ -106,6 +112,7 @@ public class ScriptMenuTabController : MonoBehaviour
                 ChangerCanvasGroup(true, BattlesScreen);
                 ChangerCanvasGroup(false, StageScreen);
                 ChangerCanvasGroup(false, SkillsScreen);
+                panel.HideInfoPanel();
                 flagVisible = true;
                 break;
             case "Skills":
@@ -116,6 +123,7 @@ public class ScriptMenuTabController : MonoBehaviour
                 ChangerCanvasGroup(false, BattlesScreen);
                 ChangerCanvasGroup(false, StageScreen);
                 ChangerCanvasGroup(true, SkillsScreen);
+                panel.HideInfoPanel();
                 break;
         }
     }

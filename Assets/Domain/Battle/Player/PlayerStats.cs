@@ -1,65 +1,65 @@
 using BreakInfinity;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    public BigDouble maxHP;
-    public BigDouble CurrentmaxHP;
-    public BigDouble currentHP;
-
+    [Header("Base Stats")]
     public BigDouble Attack;
-    public BigDouble CurrentAttack;
-
     public BigDouble Defense;
+    public BigDouble MaxHP;
+    public BigDouble CurrentHP;
+    public int CriticalRate;   
+    public BigDouble CriticalDamage; 
+    public BigDouble CurrentAttack;
     public BigDouble CurrentDefense;
-
-    public int CriticalRate;
-    public int CurrentCR;
-
-    public BigDouble CriticalDamage;
+    public int CurrentCR; 
     public BigDouble CurrentCD;
 
-    public BigDouble LootMultiplier;
-    public bool flag = false;
-    public bool flagPotion = false;
+    [Header("Skill Modifiers (permanentes)")]
+    public int CurrentEvasionChance = 0;
+    public bool hasLifeDrain = false;
+    public bool hasExecution = false;
+    public bool hasRegeneration = false;
+    public bool hasShieldBreaker = false;
+    public bool hasGuardiansBane = false;
+    public bool hasCriticalFocus = false;
+    public bool hasPowerStrike = false;
+    public bool hasExpertSwordman = false;
+    public bool hasMastery = false;
+    public BigDouble xpMultiplier = 1;
 
+    [Header("HUD Flags (ya tenías esto)")]
     public BattleHUDPlayer hud;
+    public BigDouble LootMultiplier;
+    public bool flag;
+    public bool flagPotion = false;
+    public bool wasinstak = false;
+
     public float durationA;
     public float durationD;
     public float durationCR;
     public float durationCD;
 
-    //private PlayerSkills playerSkills;
+    private void Start()
+    {
+        // Inicializar stats dinámicos
+        setCurrentStats();
+    }
 
     public void setCurrentStats()
     {
-        //playerSkills.OnSkillUnlocked += PlayerSkills_OnSkillUnlocked;
         CurrentAttack = Attack;
         CurrentDefense = Defense;
+        CurrentHP = MaxHP;
         CurrentCR = CriticalRate;
         CurrentCD = CriticalDamage;
+        CurrentEvasionChance = 0; // solo skills lo activan
     }
 
-    public bool TakeDamage(BigDouble dmg)
-    {
-        currentHP -= dmg;
-
-        if (currentHP <= 0)
-            return true;
-        else
-            return false;
-    }
-
-    public void Heal(BigDouble amount)
-    {
-        BigDouble tamount = amount * 0.25;
-        currentHP += tamount.Truncate();
-        if (currentHP > CurrentmaxHP)
-            currentHP = CurrentmaxHP;
-    }
+    // ------------------------
+    // Pociones
+    // ------------------------
 
     public void IncreaseAttack()
     {
@@ -85,10 +85,7 @@ public class PlayerStats : MonoBehaviour
         durationCR = 20f;
         hud.flagCR = true;
         CurrentCR += (int)amount.ToDouble();
-        if (CurrentCR > 100)
-        {
-            CurrentCR = 100;
-        }
+        if (CurrentCR > 100) CurrentCR = 100;
         StartCoroutine(ResetStatAfterDuration(amount, durationCR, () => CurrentCR -= (int)amount.ToDouble()));
     }
 
@@ -101,134 +98,100 @@ public class PlayerStats : MonoBehaviour
         StartCoroutine(ResetStatAfterDuration(amount, durationCD, () => CurrentCD -= amount));
     }
 
-    public BigDouble CalculateDamage(BigDouble target)
-    {
-        // Base damage calculation
-        BigDouble baseDamage = (CurrentAttack * 2) - target;
+    // ------------------------
+    // Cálculo de daño
+    // ------------------------
 
-        // Adjust for critical hits
-        bool isCritical = IsCriticalHit(CurrentCR);
-        if (isCritical == true)
+    public BigDouble CalculateDamage(Unit enemy)
+    {
+        // Base damage
+        BigDouble baseDamage = (CurrentAttack * 2) - enemy.Defense;
+
+        // ShieldBreaker (5%) y GuardiansBane (15%) - ignoran parte de la defensa
+        if (hasShieldBreaker && Random.value < 0.05f)
+            baseDamage += enemy.Defense * 0.5;
+        if (hasGuardiansBane && Random.value < 0.15f)
+            baseDamage += enemy.Defense * 0.5;
+
+        // Execution - 5% instakill
+        if (hasExecution && Random.value < 0.50f)
         {
-            BigDouble CriticalDamageMultiplier = 1 + (CurrentCD / 100);
-            baseDamage *= CriticalDamageMultiplier;
+            flag = false;
+            wasinstak = true;
+            return enemy.currentHP; // valor grande = instakill (puedes adaptarlo)
+            
+        }
+
+        // Críticos
+        bool isCritical = IsCriticalHit(CurrentCR);
+        if (isCritical)
+        {
+            BigDouble critMultiplier = 1 + (CurrentCD / 100);
+            baseDamage *= critMultiplier;
             flag = true;
+
+            // Critical Focus - chance de doble crítico
+            if (hasCriticalFocus && Random.value < 0.05f)
+                baseDamage *= 2;
         }
         else
         {
             flag = false;
         }
-        // Apply additional modifiers (e.g., abilities, equipment bonuses)
-        //baseDamage += CalculateAdditionalModifiers(attacker);
 
-        // Ensure damage is positive and return the result
+        // PowerStrike (25%) + ExpertSwordman (50%)
+        if (hasPowerStrike)
+            baseDamage *= 1.25;
+        if (hasExpertSwordman)
+            baseDamage *= 1.50;
+
+        // LifeDrain
+        if (hasLifeDrain && baseDamage > 0)
+        {
+            BigDouble healAmount = baseDamage * 0.25;
+            Heal(healAmount);
+        }
+        wasinstak = false;
         return BigDouble.Max(baseDamage, 0);
+        
     }
 
     private bool IsCriticalHit(int criticalRate)
     {
-        float roll = Random.Range(1.0f, 100.0f);
-        roll = Mathf.RoundToInt(roll);
-
-        if (roll < criticalRate)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        float roll = Random.Range(1f, 100f);
+        return roll <= criticalRate;
     }
 
-    public BigDouble tempoStat(string namePotion)
+    // ------------------------
+    // Soporte skills
+    // ------------------------
+
+    public void Heal(BigDouble amount)
     {
-        BigDouble stat;
-        if (namePotion == "ATK")
-        {
-            BigDouble tamount = Attack * 0.10;
-            stat = Attack + tamount;
-            return stat.Truncate();
-        }
-        else if (namePotion == "DEF")
-        {
-            BigDouble tamount = Defense * 0.20;
-            stat = Defense + tamount;
-            return stat.Truncate();
-        }
-        else if (namePotion == "CR")
-        {
-            stat = CriticalRate + 15;
-            return stat;
-        }
-        else if (namePotion == "CD")
-        {
-            stat = CriticalDamage + 50;
-            return stat.Truncate();
-        }
+        CurrentHP += amount;
+        if (CurrentHP > MaxHP) CurrentHP = MaxHP;
+    }
+
+    public bool TryEvade()
+    {
+        if (CurrentEvasionChance <= 0) return false;
+        float roll = Random.Range(1f, 100f);
+        return roll <= CurrentEvasionChance;
+    }
+
+    public bool TakeDamage(BigDouble dmg)
+    {
+        CurrentHP -= dmg;
+
+        if (CurrentHP <= 0)
+            return true;
         else
-        {
-            return stat = 0;
-        }
+            return false;
     }
 
     private IEnumerator ResetStatAfterDuration(BigDouble amount, float duration, System.Action resetAction)
     {
         yield return new WaitForSeconds(duration);
-        resetAction.Invoke(); // Reset the stat after the duration
-    }
-
-    /*private int CalculateAdditionalModifiers(Character character)
-    {
-        int additionalDamage = 0;
-
-        // Example: Add damage bonuses from equipped items or active abilities
-        foreach (Item item in character.EquippedItems)
-        {
-            additionalDamage += item.DamageBonus;
-        }
-
-        // Example: Apply damage modifiers based on character's status effects or buffs
-        foreach (StatusEffect effect in character.StatusEffects)
-        {
-            additionalDamage += effect.DamageModifier;
-        }
-
-        return additionalDamage;
-    }*/
-
-    public void SetVitalityBoost()
-    {
-        CurrentmaxHP = (maxHP / 2) + maxHP;
-    }
-
-    public void IncreaseHealth(int amount)
-    {
-      
-        Debug.Log("Health increased by " + amount);
-    }
-
-    public void IncreaseShield(int amount)
-    {
-       
-        Debug.Log("Shield increased by " + amount);
-    }
-
-    public void EnableLifeDrain(bool enabled)
-    {
-        
-        Debug.Log("Life Drain enabled: " + enabled);
-    }
-
-    public void IncreaseCriticalChance(int amount)
-    {
-        CurrentCR += amount;
-        Debug.Log("Critical chance increased by " + amount + "%");
-    }
-
-    public void IncreaseEvasion(int amount)
-    {
-       
-        Debug.Log("Evasion chance increased by " + amount + "%");
+        resetAction.Invoke();
     }
 }
-

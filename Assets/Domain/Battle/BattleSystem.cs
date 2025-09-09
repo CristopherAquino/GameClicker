@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+#if UNITY_EDITOR
 using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
+#endif
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -140,9 +142,9 @@ public class BattleSystem : MonoBehaviour
 		drop.cleanpanel();
 		mods(name);
         playerHUD.setNewStart();
-        if (playerUnit.currentHP != playerUnit.CurrentmaxHP)
+        if (playerUnit.CurrentHP != playerUnit.MaxHP)
         {
-            playerUnit.currentHP = playerUnit.CurrentmaxHP;
+            playerUnit.CurrentHP = playerUnit.MaxHP;
         }
         StartNewBattle();
     }
@@ -161,8 +163,7 @@ public class BattleSystem : MonoBehaviour
 		enemyUnit = enemyGO.GetComponent<Unit>();
 		enemyUnit.SetStats(setEnemylvl(namestage));
 		anim = enemyGO.GetComponentInChildren<Animator>();
-
-		dialogueText.text = "Battle Beggin!";
+        dialogueText.text = "Battle Beggin!";
 
 		playerHUD.SetHUD(playerUnit);
 		enemyHUD.SetHUD(enemyUnit);
@@ -173,63 +174,88 @@ public class BattleSystem : MonoBehaviour
 		PlayerTurn();
 	}
 
-	IEnumerator PlayerAttack()
-	{
-		bool isDead = enemyUnit.TakeDamage(playerUnit.CalculateDamage(enemyUnit.Defense));
-		anim.SetBool("Damaged", true);
-		if (playerUnit.flag == true)
-		{
-			dialogueText.text = "Critical Hit!";
-		}
-		else
-		{
+    IEnumerator PlayerAttack()
+    {
+        BigDouble finalDamage = playerUnit.CalculateDamage(enemyUnit);
+
+        bool isDead = enemyUnit.TakeDamage(finalDamage);
+
+        anim.SetBool("Damaged", true);
+        if (playerUnit.flag == true)
+        {
+            dialogueText.text = "Critical Hit!";
+        }
+        if(playerUnit.wasinstak == true){
+            dialogueText.text = "Execution!";
+        }
+        else
+        {
             dialogueText.text = "The attack is successful!";
         }
-		state = BattleState.WAITING;
 
+            
+        state = BattleState.WAITING;
         enemyHUD.SetHP(enemyUnit.currentHP);
 
-		yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2f);
 
-		if(isDead)
-		{
-			state = BattleState.WON;
+        if (isDead)
+        {
+            state = BattleState.WON;
             anim.SetBool("Damaged", false);
             yield return new WaitForSeconds(1f);
             EndBattle();
-		} else
-		{
+        }
+        else
+        {
             anim.SetBool("Damaged", false);
             state = BattleState.ENEMYTURN;
             StartCoroutine(EnemyTurn());
-		}
-	}
+        }
+    }
 
-	IEnumerator EnemyTurn()
-	{
-		dialogueText.text = "Monster attacks!";
-		anim.SetBool("attack", true);
+
+
+    IEnumerator EnemyTurn()
+    {
+        dialogueText.text = "Monster attacks!";
+        anim.SetBool("attack", true);
 
         yield return new WaitForSeconds(1f);
 
-		bool isDead = playerUnit.TakeDamage(enemyUnit.CalculateDamage(playerUnit.Defense));
+        // Chequeo de evasión
+        if (playerUnit.TryEvade())
+        {
+            dialogueText.text = "¡Dodged attack!";
+            anim.SetBool("attack", false);
 
-		playerHUD.SetHP(playerUnit.currentHP);
+            yield return new WaitForSeconds(1f);
 
-		yield return new WaitForSeconds(1f);
+            state = BattleState.PLAYERTURN;
+            PlayerTurn();
+            yield break; // Termina aquí, enemigo falló
+        }
 
-		if(isDead)
-		{
-			state = BattleState.LOST;
-			EndBattle();
-        } else
-		{
-			state = BattleState.PLAYERTURN;
-			PlayerTurn();
-		}
-	}
+        // Si no esquiva, calcular daño normal
+        bool isDead = playerUnit.TakeDamage(enemyUnit.CalculateDamage(playerUnit.Defense));
+        playerHUD.SetHP(playerUnit.CurrentHP);
 
-	void EndBattle()
+        yield return new WaitForSeconds(1f);
+
+        if (isDead)
+        {
+            state = BattleState.LOST;
+            EndBattle();
+        }
+        else
+        {
+            state = BattleState.PLAYERTURN;
+            PlayerTurn();
+        }
+    }
+
+
+    void EndBattle()
 	{
 		if(state == BattleState.WON)
 		{
@@ -250,13 +276,18 @@ public class BattleSystem : MonoBehaviour
 	void PlayerTurn()
 	{
 		dialogueText.text = "Your Turn!";
-	}
+        if (playerUnit.hasRegeneration)
+        {
+            BigDouble regen = playerUnit.MaxHP * 0.02;
+            playerUnit.Heal(regen);
+        }
+    }
 
 	IEnumerator PlayerHeal()
 	{
-		playerUnit.Heal(playerUnit.CurrentmaxHP);
+		playerUnit.Heal(playerUnit.MaxHP);
 
-		playerHUD.SetHP(playerUnit.currentHP);
+		playerHUD.SetHP(playerUnit.CurrentHP);
 		dialogueText.text = "Recovered 25% health";
 		state = BattleState.WAITING;
 
@@ -409,7 +440,7 @@ public class BattleSystem : MonoBehaviour
 
 	public void OnContinue()
 	{
-        playerUnit.currentHP = playerUnit.maxHP;
+        playerUnit.CurrentHP = playerUnit.MaxHP;
         playerHUD.setNewStart();
         enemyUnit.currentHP = enemyUnit.maxHP;
 		enemyHUD.SetHP(enemyUnit.currentHP);

@@ -99,13 +99,13 @@ public class XPManager : MonoBehaviour
 
         oldstat();
 
-        player.maxHP += hpUP;
+        player.MaxHP += hpUP;
         player.Attack += atkUP;
         player.Defense += defUP;
         player.CriticalDamage += cdUP;
 
         LvlUPDisplay.text = "Level UP: " + Level;
-        HPIncreaseUPDisplay.text = "" + player.maxHP;
+        HPIncreaseUPDisplay.text = "" + player.MaxHP;
         ATKIncreaseUPDisplay.text = "" + player.Attack;
         DEFIncreaseUPDisplay.text = "" + player.Defense;
         CDIncreaseUPDisplay.text = "" + player.CriticalDamage;
@@ -116,7 +116,7 @@ public class XPManager : MonoBehaviour
 
     void oldstat()
     {
-        HPUPDisplay.text = "HP: " + player.maxHP;
+        HPUPDisplay.text = "HP: " + player.MaxHP;
         ATKUPDisplay.text = "ATK: " + player.Attack;
         DEFUPDisplay.text = "DEF: " + player.Defense;
         CDUPDisplay.text = "CD: " + player.CriticalDamage;

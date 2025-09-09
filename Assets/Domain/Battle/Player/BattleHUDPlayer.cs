@@ -5,7 +5,10 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+#if UNITY_EDITOR
 using static UnityEditor.Experimental.GraphView.GraphView;
+#endif
+
 
 public class BattleHUDPlayer : MonoBehaviour
 {
@@ -52,8 +55,8 @@ public class BattleHUDPlayer : MonoBehaviour
         levelText.text = "" + NotationScript.Notate(lv.currentLevel);
         hpSlider.maxValue = 1;
 
-        currenthp = player.currentHP;
-        maxhp = player.CurrentmaxHP;
+        currenthp = player.CurrentHP;
+        maxhp = player.MaxHP;
         SetHP(currenthp);
     }
 

@@ -1,4 +1,6 @@
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -30,7 +32,7 @@ public class ApplyLayerToChildren : MonoBehaviour
         }
     }
 }
-
+#if UNITY_EDITOR
 [CustomEditor(typeof(ApplyLayerToChildren))]
 public class ApplyLayerToChildrenEditor : Editor
 {
@@ -48,3 +50,4 @@ public class ApplyLayerToChildrenEditor : Editor
         }
     }
 }
+#endif

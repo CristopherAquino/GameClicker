@@ -1,58 +1,128 @@
-using System.Collections;
-using System.Collections.Generic;
+using BreakInfinity;
 using UnityEngine;
+
+public enum SkillState { Locked, Available, Unlocked }
+
+public enum SkillType
+{
+    None,
+    VitalityBoost,
+    BetterShield,
+    LifeDrain,
+    CriticalFocus,
+    Evasion,
+    ShieldBreaker,
+    Regeneration,
+    PowerStrike,
+    Execution,
+    QuickStep,
+    Fortify,
+    GuardiansBane,
+    ExpertSwordman,
+    Mastery
+}
 
 [System.Serializable]
 public class Skill
 {
+    [Header("General Info")]
     public string skillName;
-    public bool isUnlocked = false;
-    public int requiredLevel;
-    PlayerStats effect;
+    [TextArea] public string description;
+    public Sprite icon;
 
-    public Skill(string name, int level)
+    [Header("Progress")]
+    public SkillState state;
+    public SkillType skillType;
+    public BigDouble requiredLevel;
+
+    [Header("Dependencies")]
+    public SkillType prerequisite = SkillType.None; // skill previa necesaria
+
+    // referencia a stats del jugador
+    private PlayerStats effect;
+
+    public Skill(string name, SkillType type, BigDouble level, string desc = "", Sprite skillIcon = null, SkillType prereq = SkillType.None)
     {
         skillName = name;
+        skillType = type;
         requiredLevel = level;
+        description = desc;
+        icon = skillIcon;
+        prerequisite = prereq;
+        state = SkillState.Locked;
     }
 
-    public void Unlock()
+    public void Unlock(PlayerStats stats)
     {
-        if (!isUnlocked)
+        if (state != SkillState.Unlocked)
         {
-            isUnlocked = true;
-            Debug.Log(skillName + " unlocked!");
-            ApplyEffect();
+            state = SkillState.Unlocked;
+            effect = stats;
+            ApplyEffect(stats);
         }
     }
 
-    public void ApplyEffect()
+    public void ApplyEffect(PlayerStats stats)
     {
-        switch (skillName)
+        switch (skillType)
         {
-            case "VitalityBoost":
-                // Effect: Increase 50% the player's MaxHP permanently in battle
-                // permanently increases the player's MaxHP by 50% during battles.
-                effect.SetVitalityBoost();
+            case SkillType.VitalityBoost:
+                stats.MaxHP *= 1.5;
+                stats.CurrentHP = stats.MaxHP;
                 break;
-            case "BetterShield":
-                // Example effect: Increase player shield strength
-                
+
+            case SkillType.BetterShield:
+                stats.CurrentDefense += stats.Defense * 0.10;
                 break;
-            case "LifeDrain":
-                // Example effect: Enable life drain on attacks
-                
+
+            case SkillType.LifeDrain:
+                stats.hasLifeDrain = true;
                 break;
-            case "CriticalFocus":
-                // Example effect: Increase critical hit chance
-               
+
+            case SkillType.CriticalFocus:
+                stats.hasCriticalFocus = true;
+                stats.CurrentCR = Mathf.Min(100, stats.CurrentCR + 5);
                 break;
-            case "Evasion":
-                // Example effect: Increase dodge chance
+
+            case SkillType.Evasion:
+                stats.CurrentEvasionChance += 10;
                 break;
-            // Add more cases for other skills
-            case "Mastery":
-                // Example effect: Overall boost to all stats
+
+            case SkillType.ShieldBreaker:
+                stats.hasShieldBreaker = true;
+                break;
+
+            case SkillType.Regeneration:
+                stats.hasRegeneration = true;
+                break;
+
+            case SkillType.PowerStrike:
+                stats.hasPowerStrike = true;
+                break;
+
+            case SkillType.Execution:
+                stats.hasExecution = true;
+                break;
+
+            case SkillType.QuickStep:
+                stats.CurrentEvasionChance += 20;
+                break;
+
+            case SkillType.Fortify:
+                stats.CurrentDefense += stats.Defense * 0.20;
+                break;
+
+            case SkillType.GuardiansBane:
+                stats.hasGuardiansBane = true;
+                break;
+
+            case SkillType.ExpertSwordman:
+                stats.hasExpertSwordman = true;
+                break;
+
+            case SkillType.Mastery:
+                stats.hasMastery = true;
+                stats.xpMultiplier = 3;
                 break;
         }
     }

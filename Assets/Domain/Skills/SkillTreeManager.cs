@@ -1,30 +1,23 @@
+using BreakInfinity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillTreeManager : MonoBehaviour
 {
-    public XPManager Level;
+    public XPManager xpManager;
     public List<Skill> skills = new List<Skill>();
+    public PlayerStats stats;
 
     void Start()
     {
-        // Define each skill and its required level
-        skills.Add(new Skill("None", 1));
-        skills.Add(new Skill("VitalityBoost", 5));
-        skills.Add(new Skill("BetterShield", 15));
-        skills.Add(new Skill("LifeDrain", 25));
-        skills.Add(new Skill("CriticalFocus", 30));
-        skills.Add(new Skill("Evasion", 45));
-        skills.Add(new Skill("ShieldBreaker", 60));
-        skills.Add(new Skill("Regeneration", 65));
-        skills.Add(new Skill("PowerStrike", 80));
-        skills.Add(new Skill("Execution", 100));
-        skills.Add(new Skill("QuickStep", 120));
-        skills.Add(new Skill("Fortify", 140));
-        skills.Add(new Skill("GuardiansBane", 165));
-        skills.Add(new Skill("ExpertSwordman", 185));
-        skills.Add(new Skill("Mastery", 200));
+        foreach (var s in skills)
+        {
+            if (s.skillType != SkillType.None)
+                s.state = SkillState.Locked;
+        }
+
+        CheckSkills();
     }
 
     void Update()
@@ -34,12 +27,39 @@ public class SkillTreeManager : MonoBehaviour
 
     void CheckSkills()
     {
-        foreach (Skill skill in skills)
+        if (!xpManager) return;
+
+        BigDouble level = xpManager.Level;
+
+        foreach (var s in skills)
         {
-            if (Level.currentLevel >= skill.requiredLevel && !skill.isUnlocked)
+            if (s.skillType == SkillType.None) continue;
+
+            // si ya está desbloqueada, ignorar
+            if (s.state == SkillState.Unlocked) continue;
+
+            // revisar nivel
+            if (level < s.requiredLevel) continue;
+
+            // revisar prerequisito
+            if (s.prerequisite != SkillType.None)
             {
-                skill.Unlock();
+                Skill prereq = skills.Find(x => x.skillType == s.prerequisite);
+                if (prereq == null || prereq.state != SkillState.Unlocked)
+                    continue; // requisito no cumplido
             }
+
+            // si cumple todo - marcar como disponible
+            if (s.state == SkillState.Locked)
+                s.state = SkillState.Available;
+        }
+    }
+
+    public void UnlockSkill(Skill skill)
+    {
+        if (skill.state == SkillState.Available)
+        {
+            skill.Unlock(stats);
         }
     }
 }
